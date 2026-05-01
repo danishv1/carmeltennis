@@ -15,6 +15,8 @@ import 'change_password.dart';
 import 'theme_controller.dart';
 import 'tv_screen.dart';
 import 'tv_message_editor.dart';
+import 'booking_grid/tokens.dart';
+import 'booking_grid/booking_grid_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +27,9 @@ void main() async {
   );
   // ✅ Ensure user/email↔name mapping is ready for cold start
   await UserManager.instance.fetchAndStoreUserMappings();
+
+  // Restore persisted theme preference (booking-theme)
+  await ThemeController.instance.load();
 
   // Initialize your application state
   final appState = ApplicationState();
@@ -55,6 +60,7 @@ ThemeData buildLightTheme() {
 
   return base.copyWith(
     textTheme: text,
+    extensions: const [BgTokens.light],
   );
 }
 
@@ -73,6 +79,7 @@ ThemeData buildDarkTheme() {
 
   return base.copyWith(
     textTheme: text,
+    extensions: const [BgTokens.dark],
   );
 }
 
@@ -187,6 +194,10 @@ final _router = GoRouter(
         GoRoute(
           path: 'tv-message',
           builder: (context, state) => const TvMessageEditor(),
+        ),
+        GoRoute(
+          path: 'booking-grid',
+          builder: (context, state) => const BookingGridScreen(),
         ),
       ],
     ),
